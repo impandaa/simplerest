@@ -3,10 +3,10 @@
   include_once 'conn.php';
   function get_mahasiswa($mhs_id=""){
     global $conn;
-    header("Content-Type:application/json");
+
     $response = array();
     if($conn){
-      header("HTTP/1.1 200 ". "Retrieving Students");
+
       $sql  = "SELECT * FROM mahasiswa";
 
       $result = $conn->query($sql);
@@ -33,10 +33,10 @@
 
   function insert_mahasiswa(){
     global $conn;
-    header("Content-Type:application/json");
+
     $response = array();
     if($conn){
-      header("HTTP/1.1 200 ". "Inserting");
+
       $data   = json_decode(file_get_contents('php://input'), true);
 
       $nama   = $data['data']['nama'];
@@ -60,6 +60,8 @@
   }
 
 	$request_method=$_SERVER["REQUEST_METHOD"];
+  header("Content-Type:application/json");
+  header("HTTP/1.1 200 ". "Perfectly Fine");
 	switch($request_method)
 	{
 		case 'GET':
@@ -81,7 +83,7 @@
 		case 'PUT':
 			// Update Product
       $mahasiswa_id=intval($_GET["mahasiswa_id"]);
-			update_product($mahasiswa_id);
+			update_mahasiswa($mahasiswa_id);
 			break;
 		case 'DELETE':
 			// Delete Product
