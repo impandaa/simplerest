@@ -14,12 +14,17 @@ foreach ($search_results['data'] as $mahasiswa) {
     $nim      = $mahasiswa["nim"];
     $umur     = $mahasiswa["prodi"];
     $gambar   = $mahasiswa["ipk"];
+    $id       = $mahasiswa["idmahasiswa"];
 
     echo '<tr>
           <td>' . $nama . '</td>
           <td>' . $nim . '</td>
           <td>' . $umur . '</td>
           <td>' . $gambar . '</td>
+          <td>
+            <a href="http://localhost/kuliah/rest/edit.php?idmahasiswa='.$id.'">Edit</a>
+            <a href="http://localhost/kuliah/rest/hapus.php?idmahasiswa='.$id.'">Hapus</a>
+          </td>
     </tr>';
 
 

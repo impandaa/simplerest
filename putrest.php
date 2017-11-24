@@ -1,25 +1,23 @@
 <?php
-
   include_once 'conn.php';
   function get_mahasiswa($mhs_id=""){
     global $conn;
 
     $response = array();
     if($conn){
-
-      $sql  = "SELECT * FROM mahasiswa";
-
-      $result = $conn->query($sql);
-      $data = array();
+      $sql                         = "SELECT * FROM mahasiswa";
+      $result                      = $conn->query($sql);
+      $data                        = array();
       $response['status']          = 200;
       $response['status_message']  = "Data Found";
       $i=0;
       while ($row = $result->fetch_assoc()) {
-        $data[$i]['nama']   = $row['nama'];
-        $data[$i]['nim']    = $row['nim'];
-        $data[$i]['prodi']  = $row['programstudi'];
-        $data[$i]['ipk']    = $row['ipk'];
-        $data[$i]['foto']   = $row['foto'];
+        $data[$i]['nama']         = $row['nama'];
+        $data[$i]['idmahasiswa']  = $row['idmahasiswa'];
+        $data[$i]['nim']          = $row['nim'];
+        $data[$i]['prodi']        = $row['programstudi'];
+        $data[$i]['ipk']          = $row['ipk'];
+        $data[$i]['foto']         = $row['foto'];
         $i++;
       }
       $response['data']=$data;
