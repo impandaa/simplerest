@@ -2,7 +2,6 @@
   include_once 'conn.php';
   function get_mahasiswa($mhs_id=""){
     global $conn;
-
     $response = array();
     if($conn){
       $sql                         = "SELECT * FROM mahasiswa";
@@ -22,25 +21,20 @@
       }
       $response['data']=$data;
       echo json_encode($response);
-
     }
     else{
       echo "Error connecting";
     }
   }
-
   function insert_mahasiswa(){
     global $conn;
-
     $response = array();
     if($conn){
-
-      $data   = json_decode(file_get_contents('php://input'), true);
-
-      $nama   = $data['data']['nama'];
-      $nim    = $data['data']['nim'];
-      $prodi  = $data['data']['prodi'];
-      $ipk    = $data['data']['ipk'];
+      // $data   = json_decode(file_get_contents('php://input'), true);
+      $nama   = $_POST['nama'];
+      $nim    = $_POST['nim'];
+      $prodi  = $_POST['prodi'];
+      $ipk    = $_POST['ipk'];
       $sql    = "INSERT INTO mahasiswa(`nama`, `nim`, `programstudi`, `ipk`)
                           VALUES('$nama', '$nim', '$prodi', '$ipk')";
       if ($conn->query($sql)){
@@ -59,7 +53,6 @@
 
 	$request_method=$_SERVER["REQUEST_METHOD"];
   header("Content-Type:application/json");
-
 	switch($request_method)
 	{
 		case 'GET':

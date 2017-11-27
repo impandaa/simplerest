@@ -13,7 +13,7 @@
 </head>
 
 <body>
- <form action="submit.php" method="post">
+ <form action="putrest.php" method="post">
    <table>
        <tr>
            <td>Nama</td>
@@ -34,7 +34,7 @@
            <td>IPK</td>
            <td>:</td>
            <td><input type="text" name="ipk"></td>
-       </tr>       
+       </tr>
        <tr>
            <input type="submit" name="kirim">
        </tr>
