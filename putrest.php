@@ -4,7 +4,10 @@
     global $conn;
     $response = array();
     if($conn){
-      $sql                         = "SELECT * FROM mahasiswa";
+      if($mhs_id == "")
+        $sql                         = "SELECT * FROM mahasiswa";
+      else
+        $sql                         = "SELECT * FROM mahasiswa WHERE idmahasiswa=$mhs_id";
       $result                      = $conn->query($sql);
       $data                        = array();
       $response['status']          = 200;
@@ -23,31 +26,57 @@
       echo json_encode($response);
     }
     else{
-      echo "Error connecting";
+      $response['status']          = 412;
+      $response['status_message']  = "Read Failure";
+      echo json_encode($response);
     }
   }
-  function insert_mahasiswa(){
+  function submit_mahasiswa($idmhs=""){
     global $conn;
     $response = array();
+    $nama   = $_POST['nama'];
+    $nim    = $_POST['nim'];
+    $prodi  = $_POST['prodi'];
+    $ipk    = $_POST['ipk'];
     if($conn){
-      // $data   = json_decode(file_get_contents('php://input'), true);
-      $nama   = $_POST['nama'];
-      $nim    = $_POST['nim'];
-      $prodi  = $_POST['prodi'];
-      $ipk    = $_POST['ipk'];
-      $sql    = "INSERT INTO mahasiswa(`nama`, `nim`, `programstudi`, `ipk`)
+      if($idmhs == ""){
+
+        $sql    = "INSERT INTO mahasiswa(`nama`, `nim`, `programstudi`, `ipk`)
                           VALUES('$nama', '$nim', '$prodi', '$ipk')";
+      }
+      else
+      {
+        // $_PUT = json_decode(file_get_contents("php://input"), true);
+        //
+        // $nama   = $_PUT['nama'];
+        // $nim    = $_PUT['nim'];
+        // $prodi  = $_PUT['prodi'];
+        // $ipk    = $_PUT['ipk'];
+        $sql = "UPDATE `mahasiswa`
+               SET `nama`='$nama',
+                   `nim`='$nim',
+                   `programstudi`='$prodi',
+                   `ipk`='$ipk'
+               WHERE `idmahasiswa`=$idmhs";
+      }
+  
       if ($conn->query($sql)){
           $data = array();
           $response['status']          = 200;
-          $response['status_message']  = "Insert Success";
+          $response['status_message']  = "Commit Success";
           echo json_encode($response);
       }
-      else
-          echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+      else{
+        $response['status']          = 417;
+        $response['status_message']  = "Commit Failure";
+        echo json_encode($response);
+      }
+
     }
     else{
-      echo "Error connecting";
+      $response['status']          = 412;
+      $response['status_message']  = "Error Connecting";
+      echo json_encode($response);
     }
   }
 
@@ -60,8 +89,8 @@
       header("HTTP/1.1 200 ". "Perfectly Fine");
 			if(!empty($_GET["mahasiswa_id"]))
 			{
-				$product_id=intval($_GET["product_id"]);
-				get_mahasiswa($product_id);
+				$mhs_id=intval($_GET["mahasiswa_id"]);
+				get_mahasiswa($mhs_id);
 			}
 			else
 			{
@@ -71,13 +100,19 @@
 		case 'POST':
       header("HTTP/1.1 200 ". "Perfectly Fine");
 			// Insert Product
-      insert_mahasiswa();
+
+      if(isset($_GET["mahasiswa_id"])){
+         $mahasiswa_id=intval($_GET["mahasiswa_id"]);
+			   submit_mahasiswa($mahasiswa_id);
+      }
+      else
+        submit_mahasiswa();
 			break;
 		case 'PUT':
 			// Update Product
       header("HTTP/1.1 200 ". "Perfectly Fine");
       $mahasiswa_id=intval($_GET["mahasiswa_id"]);
-			update_mahasiswa($mahasiswa_id);
+			submit_mahasiswa($mahasiswa_id);
 			break;
 		case 'DELETE':
 			// Delete Product
